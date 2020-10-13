@@ -1,0 +1,5 @@
+mutation creditAccount($id:ID!,$value:Float!) {
+  creditAccount(id:$id,value:$value){
+		balance
+  }
+}

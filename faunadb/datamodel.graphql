@@ -1,13 +1,42 @@
 type User {
     name: String!
-    age: Int!
-    accounts: [Account]
+    country: String
+    email: ID! @unique
+    accounts: [Account!] @relation
 }
+
 
 type Account {
     balance: Float!
+    owner: User!
 }
 
+
+
+
 type Query {
-    
+   findUserByName(name: String!): User
+   findUserByEmail(email: ID!): User
+   findUserByNameAndCountry(name: String!, country:String!): User
+   findUsersByNameAndCountry(name: String!, country:String!): [User]
+   
+   users: [User]
+   whatever: [User]
 }
+
+type Mutation {
+    updateUserEmail(id: ID!, email: ID!): User @resolver
+    # New
+    creditAccount(id:ID!, value: Float!): Account @resolver
+    debitAccount(id:ID!, value: Float!): Account @resolver
+}
+
+# update_email
+# Query(
+#   Lambda(
+#     ["id", "email"],
+#     Update(Ref(Collection("User"), Var("id")), {
+#       data: { email: Var("email") }
+#     })
+#   )
+# )

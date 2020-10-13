@@ -1,0 +1,203 @@
+directive @embedded on OBJECT
+directive @collection(name: String!) on OBJECT
+directive @index(name: String!) on FIELD_DEFINITION
+directive @resolver(
+  name: String
+  paginated: Boolean! = false
+) on FIELD_DEFINITION
+directive @relation(name: String) on FIELD_DEFINITION
+directive @unique(index: String) on FIELD_DEFINITION
+type Account {
+  # The document's ID.
+  _id: ID!
+  # The document's timestamp.
+  _ts: Long!
+  balance: Float!
+  owner: User!
+}
+
+# 'Account' input values
+input AccountInput {
+  balance: Float!
+  owner: AccountOwnerRelation
+}
+
+# Allow manipulating the relationship between the types 'Account' and 'User' using the field 'Account.owner'.
+input AccountOwnerRelation {
+  # Create a document of type 'User' and associate it with the current document.
+  create: UserInput
+  # Connect a document of type 'User' with the current document using its ID.
+  connect: ID
+}
+
+# The pagination object for elements of type 'Account'.
+type AccountPage {
+  # The elements of type 'Account' in this page.
+  data: [Account]!
+  # A cursor for elements coming after the current page.
+  after: String
+  # A cursor for elements coming before the current page.
+  before: String
+}
+
+scalar Date
+
+# The `Long` scalar type
+#  represents non-fractional signed whole numeric values.
+# Long can represent values between -(2^63) and 2^63 - 1.
+scalar Long
+
+type Mutation {
+  # Update an existing document in the collection of 'User'
+  updateUser(
+    # The 'User' document's ID
+    id: ID!
+    # 'User' input values
+    data: UserInput!
+  ): User
+  # Partially updates an existing document in the collection of 'Account'. It only
+  # modifies the values that are specified in the arguments. During execution, it
+  # verifies that required fields are not set to 'null'.
+  partialUpdateAccount(
+    # The 'Account' document's ID
+    id: ID!
+    # 'Account' input values
+    data: PartialUpdateAccountInput!
+  ): Account
+  # Create a new document in the collection of 'User'
+  createUser(
+    # 'User' input values
+    data: UserInput!
+  ): User!
+  # Delete an existing document in the collection of 'Account'
+  deleteAccount(
+    # The 'Account' document's ID
+    id: ID!
+  ): Account
+  creditAccount(id: ID!, value: Float!): Account
+  # Update an existing document in the collection of 'Account'
+  updateAccount(
+    # The 'Account' document's ID
+    id: ID!
+    # 'Account' input values
+    data: AccountInput!
+  ): Account
+  # Delete an existing document in the collection of 'User'
+  deleteUser(
+    # The 'User' document's ID
+    id: ID!
+  ): User
+  debitAccount(id: ID!, value: Float!): Account
+  # Partially updates an existing document in the collection of 'User'. It only
+  # modifies the values that are specified in the arguments. During execution, it
+  # verifies that required fields are not set to 'null'.
+  partialUpdateUser(
+    # The 'User' document's ID
+    id: ID!
+    # 'User' input values
+    data: PartialUpdateUserInput!
+  ): User
+  # Create a new document in the collection of 'Account'
+  createAccount(
+    # 'Account' input values
+    data: AccountInput!
+  ): Account!
+  updateUserEmail(id: ID!, email: ID!): User
+}
+
+# 'Account' input values
+input PartialUpdateAccountInput {
+  balance: Float
+  owner: AccountOwnerRelation
+}
+
+# 'User' input values
+input PartialUpdateUserInput {
+  name: String
+  country: String
+  email: ID
+  accounts: UserAccountsRelation
+}
+
+type Query {
+  findUserByNameAndCountry(name: String!, country: String!): User
+  findUserByEmail(email: ID!): User
+  findUsersByNameAndCountry(
+    # The number of items to return per page.
+    _size: Int
+    # The pagination cursor.
+    _cursor: String
+    name: String!
+    country: String!
+  ): UserPage!
+  findUserByName(name: String!): User
+  users(
+    # The number of items to return per page.
+    _size: Int
+    # The pagination cursor.
+    _cursor: String
+  ): UserPage!
+  # Find a document from the collection of 'User' by its id.
+  findUserByID(
+    # The 'User' document's ID
+    id: ID!
+  ): User
+  whatever(
+    # The number of items to return per page.
+    _size: Int
+    # The pagination cursor.
+    _cursor: String
+  ): UserPage!
+  # Find a document from the collection of 'Account' by its id.
+  findAccountByID(
+    # The 'Account' document's ID
+    id: ID!
+  ): Account
+}
+
+scalar Time
+
+type User {
+  name: String!
+  email: ID!
+  # The document's ID.
+  _id: ID!
+  country: String
+  accounts(
+    # The number of items to return per page.
+    _size: Int
+    # The pagination cursor.
+    _cursor: String
+  ): AccountPage!
+  # The document's timestamp.
+  _ts: Long!
+}
+
+# Allow manipulating the relationship between the types 'User' and 'Account'.
+input UserAccountsRelation {
+  # Create one or more documents of type 'Account' and associate them with the current document.
+  create: [AccountInput]
+  # Connect one or more documents of type 'Account' with the current document using their IDs.
+  connect: [ID]
+  # Disconnect the given documents of type 'Account' from the current document using their IDs.
+  disconnect: [ID]
+}
+
+# 'User' input values
+input UserInput {
+  name: String!
+  country: String
+  email: ID!
+  accounts: UserAccountsRelation
+}
+
+# The pagination object for elements of type 'User'.
+type UserPage {
+  # The elements of type 'User' in this page.
+  data: [User]!
+  # A cursor for elements coming after the current page.
+  after: String
+  # A cursor for elements coming before the current page.
+  before: String
+}
+

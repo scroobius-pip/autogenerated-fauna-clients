@@ -1,0 +1,9 @@
+query findUserByNameAndCountry($name:String!, $country:String!) {
+  findUsersByNameAndCountry(name:$name,country:$country,_size:10){
+   data{
+    name
+    email
+    country
+  }
+  }
+}
