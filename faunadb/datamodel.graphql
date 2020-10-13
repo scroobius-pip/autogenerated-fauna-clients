@@ -1,0 +1,13 @@
+type User {
+    name: String!
+    age: Int!
+    accounts: [Account]
+}
+
+type Account {
+    balance: Float!
+}
+
+type Query {
+    
+}
