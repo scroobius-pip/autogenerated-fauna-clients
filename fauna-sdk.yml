@@ -1,5 +1,8 @@
 overwrite: true
-schema: ./faunadb/faunadbSchema.graphql
+schema:
+  - https://graphql.fauna.com/graphql:
+      headers:
+        Authorization: "Bearer fnAD5vHRYDACB463FFowqfjHBZeYou9P10HhRwi5"
 documents: "./**/*.graphql"
 generates:
   ./generated/sdk.ts:

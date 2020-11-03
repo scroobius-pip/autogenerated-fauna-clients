@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "fauna-upload": "curl -u fnAD5vHRYDACB463FFowqfjHBZeYou9P10HhRwi5: https://graphql.fauna.com/import --data-binary \"@./faunadb/datamodel.graphql\"",
     "faunasdk-gen": "graphql-codegen --config fauna-sdk.yml"
   },
   "repository": {

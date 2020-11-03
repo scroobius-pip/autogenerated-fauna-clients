@@ -11,54 +11,41 @@ export type Scalars = {
   Int: number;
   Float: number;
   Date: any;
-  Long: any;
   Time: any;
+  /** The `Long` scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
+  Long: any;
 };
 
-
-
-
-
-
-
-export type Account = {
-  __typename?: 'Account';
-  _id: Scalars['ID'];
-  _ts: Scalars['Long'];
-  balance: Scalars['Float'];
-  owner: User;
-};
-
+/** 'Account' input values */
 export type AccountInput = {
   balance: Scalars['Float'];
   owner?: Maybe<AccountOwnerRelation>;
 };
 
+/** Allow manipulating the relationship between the types 'Account' and 'User' using the field 'Account.owner'. */
 export type AccountOwnerRelation = {
+  /** Create a document of type 'User' and associate it with the current document. */
   create?: Maybe<UserInput>;
+  /** Connect a document of type 'User' with the current document using its ID. */
   connect?: Maybe<Scalars['ID']>;
 };
-
-export type AccountPage = {
-  __typename?: 'AccountPage';
-  data: Array<Maybe<Account>>;
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-};
-
 
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Update an existing document in the collection of 'User' */
   updateUser?: Maybe<User>;
-  partialUpdateAccount?: Maybe<Account>;
+  /** Create a new document in the collection of 'User' */
   createUser: User;
+  /** Delete an existing document in the collection of 'Account' */
   deleteAccount?: Maybe<Account>;
   creditAccount?: Maybe<Account>;
+  /** Update an existing document in the collection of 'Account' */
   updateAccount?: Maybe<Account>;
+  /** Delete an existing document in the collection of 'User' */
   deleteUser?: Maybe<User>;
   debitAccount?: Maybe<Account>;
-  partialUpdateUser?: Maybe<User>;
+  /** Create a new document in the collection of 'Account' */
   createAccount: Account;
   updateUserEmail?: Maybe<User>;
 };
@@ -67,12 +54,6 @@ export type Mutation = {
 export type MutationUpdateUserArgs = {
   id: Scalars['ID'];
   data: UserInput;
-};
-
-
-export type MutationPartialUpdateAccountArgs = {
-  id: Scalars['ID'];
-  data: PartialUpdateAccountInput;
 };
 
 
@@ -109,12 +90,6 @@ export type MutationDebitAccountArgs = {
 };
 
 
-export type MutationPartialUpdateUserArgs = {
-  id: Scalars['ID'];
-  data: PartialUpdateUserInput;
-};
-
-
 export type MutationCreateAccountArgs = {
   data: AccountInput;
 };
@@ -125,16 +100,44 @@ export type MutationUpdateUserEmailArgs = {
   email: Scalars['ID'];
 };
 
-export type PartialUpdateAccountInput = {
-  balance?: Maybe<Scalars['Float']>;
-  owner?: Maybe<AccountOwnerRelation>;
+
+/** Allow manipulating the relationship between the types 'User' and 'Account'. */
+export type UserAccountsRelation = {
+  /** Create one or more documents of type 'Account' and associate them with the current document. */
+  create?: Maybe<Array<Maybe<AccountInput>>>;
+  /** Connect one or more documents of type 'Account' with the current document using their IDs. */
+  connect?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** Disconnect the given documents of type 'Account' from the current document using their IDs. */
+  disconnect?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
-export type PartialUpdateUserInput = {
-  name?: Maybe<Scalars['String']>;
+/** 'User' input values */
+export type UserInput = {
+  name: Scalars['String'];
   country?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['ID']>;
+  email: Scalars['ID'];
   accounts?: Maybe<UserAccountsRelation>;
+};
+
+export type Account = {
+  __typename?: 'Account';
+  /** The document's ID. */
+  _id: Scalars['ID'];
+  /** The document's timestamp. */
+  _ts: Scalars['Long'];
+  balance: Scalars['Float'];
+  owner: User;
+};
+
+/** The pagination object for elements of type 'Account'. */
+export type AccountPage = {
+  __typename?: 'AccountPage';
+  /** The elements of type 'Account' in this page. */
+  data: Array<Maybe<Account>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -144,8 +147,10 @@ export type Query = {
   findUsersByNameAndCountry: UserPage;
   findUserByName?: Maybe<User>;
   users: UserPage;
+  /** Find a document from the collection of 'User' by its id. */
   findUserByID?: Maybe<User>;
   whatever: UserPage;
+  /** Find a document from the collection of 'Account' by its id. */
   findAccountByID?: Maybe<Account>;
 };
 
@@ -195,14 +200,15 @@ export type QueryFindAccountByIdArgs = {
   id: Scalars['ID'];
 };
 
-
 export type User = {
   __typename?: 'User';
   name: Scalars['String'];
   email: Scalars['ID'];
+  /** The document's ID. */
   _id: Scalars['ID'];
   country?: Maybe<Scalars['String']>;
   accounts: AccountPage;
+  /** The document's timestamp. */
   _ts: Scalars['Long'];
 };
 
@@ -212,25 +218,17 @@ export type UserAccountsArgs = {
   _cursor?: Maybe<Scalars['String']>;
 };
 
-export type UserAccountsRelation = {
-  create?: Maybe<Array<Maybe<AccountInput>>>;
-  connect?: Maybe<Array<Maybe<Scalars['ID']>>>;
-  disconnect?: Maybe<Array<Maybe<Scalars['ID']>>>;
-};
-
-export type UserInput = {
-  name: Scalars['String'];
-  country?: Maybe<Scalars['String']>;
-  email: Scalars['ID'];
-  accounts?: Maybe<UserAccountsRelation>;
-};
-
+/** The pagination object for elements of type 'User'. */
 export type UserPage = {
   __typename?: 'UserPage';
+  /** The elements of type 'User' in this page. */
   data: Array<Maybe<User>>;
+  /** A cursor for elements coming after the current page. */
   after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
   before?: Maybe<Scalars['String']>;
 };
+
 
 export type UserFieldsFragment = (
   { __typename?: 'User' }
